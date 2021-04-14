@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}Supression d'un article{% endblock %}
+{% block body %}
+{% if app.user %}
+<div>
+    <h1>ATTENTION !</h1>
+    <h2>Suppression de l'article :{{ article.name }}</h2>
+    <a href="{{ path('piece_delete_confirm', { 'id': article.id }) }}" class="btn btn-danger">Supprimer</a>
+    <a href="{{ path('piece_edit', { 'id': article.id }) }}" class="btn btn-primary">Revenir en arrière</a>
+</div>
+{% else %}
+    <h3>Petit malin, t'as cru faire quoi ? :)</h3>
+    <small>Connecte-toi et on n'en parle plus ;)</small><hr>
+    <a href="{{ path('security_login') }}" class="btn btn-primary">Se connecter</a>
+{% endif %}
+{% endblock %}

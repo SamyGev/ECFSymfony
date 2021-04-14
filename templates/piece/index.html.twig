@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des articles{% endblock %}
+
+{% block body %}
+<section class="articles">
+
+    {% for article in articles %}
+        {% set sum = 0 %}
+        {% for grade in article.grades %}
+            {% set sum = sum + grade.grade %}
+        {% endfor %}
+        {% set sum = sum / article.grades | length %}
+        {% set sum = sum | round(2, 'floor') %}
+        <article>
+            <h2>{{ article.name }}</h2>
+            <h5>{{ article.category.name }}</h5>
+            <h6>{{ article.price }}€  -  {{ sum }}/20  - {{ article.grades | length }} avis</h6>
+            <div class="content">
+                <img src="{{ article.image }}" alt="{{ article.imageAlt }}">
+                {{ article.description | raw }}
+                <a href="{{ path('piece_show', {'id': article.id}) }}" class="btn btn-primary">Voir le détail de l'article</a>
+            </div>
+        </article>
+        <hr>
+    {% endfor %}
+</section>
+{% endblock %}

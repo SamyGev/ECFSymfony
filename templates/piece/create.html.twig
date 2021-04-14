@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
+{% block title %}Voir un article{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+
+    <h1>Ajout d'un nouvel article</h1>
+    {{ form_start(formArticle) }}
+
+
+    {{ form_row(formArticle.name, { 'label': "Nom de l'article", 'attr': {'placeholder' : "Mon super article"}}) }}
+    {{ form_row(formArticle.category, { 'label': "Catégorie"}) }}
+    {{ form_row(formArticle.description, { 'label': "Description de l'article", 'attr': {'placeholder' : "Un article génial"}}) }}
+    {{ form_row(formArticle.image, { 'label': "URL de l'image", 'attr': {'placeholder' : "http://..."}}) }}
+    {{ form_row(formArticle.price, { 'label': "Prix", 'attr': {'placeholder' : ">0€ quand même!"}}) }}
+
+    <button type="submit" class="btn btn-primary">
+        {% if editMode %}
+            Modifier
+        {% else %}
+            Enregistrer
+        {% endif %}
+    l'article</button>
+
+    
+    {% if editMode %}
+        <a href="{{ path('piece_delete', { 'id': article.id }) }}" class="btn btn-danger">Supprimer</a>
+    {% endif %}
+
+    {{ form_end(formArticle) }}
+
+    {% else %}
+        <h3>Vous ne pouvez pas modifier / créer si vous n'êtes pas connecté.</h3>
+        <a href="{{ path('security_login') }}" class="btn btn-primary">Se connecter</a>
+    {% endif %}
+{% endblock %}

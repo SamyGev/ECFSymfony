@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}Détails{% endblock %}
+{% block body %}
+<article>
+        <h2>{{ article.name }}</h2>
+        <h1>{{ article.price }} €</h1>
+        <small>{{ article.category.name }}</small>
+        <div class="content">
+            <img src="{{ article.image }}" alt="{{ article.imageAlt }}">
+            {{ article.description | raw}}
+        </div>
+        <br>
+        <a href="../piece" class="btn btn-primary">Retour</a>
+        {% if app.user %}
+            <a href="./{{ article.id }}/edit" class="btn btn-primary">Mettre à jour l'article</a>
+        {% else %}
+            <a href="{{ path('security_login') }}" class="btn btn-primary">Se connecter</a>
+            <h3>Vous ne pouvez pas modifier / créer si vous n'êtes pas connecté.</h3>
+        {% endif %}
+
+        
+        {% set sum = 0 %}
+        {% for grade in article.grades %}
+            {% set sum = sum + grade.grade %}
+        {% endfor %}
+        {% set sum = sum / article.grades | length %}
+        {% set sum = sum | round(2, 'floor') %}
+        <h5>{{ article.grades | length }} avis:  {{ sum }}/20</h5>
+        {% for grade in article.grades %}
+        <section>
+            <div class="grade">
+                <div class="row">
+                    <div class="col-3">
+                        {{ grade.author }} (<small> {{ grade.createdAt | date('d/m/Y à H:i')}}</small>)
+                        <h3>{{ grade.grade }}/20</h3>
+                    </div>
+                    <div class="col">
+                        <p> {{ grade.comment | raw }} </p>
+                    </div>
+                </div>
+            </div><hr>
+        </section>
+        
+        {% endfor %}
+        
+        {% if app.user %}
+            {{ form_start(gradeForm) }}
+            {{ form_row(gradeForm.grade, { 'label': "Note", 'attr': {'placeholder': "/20"}}) }}
+            {{ form_row(gradeForm.comment, { 'label': "Commentaire", 'attr': {'placeholder': "Un super article!"}}) }}
+            <button type="submit" class="btn btn-success">Lache ton com'</button>
+            {{ form_end(gradeForm) }}
+        {% else %}
+            <h3>Vous ne pouvez pas commenter si vous n'êtes pas connecté.</h3>
+            <a href="{{ path('security_login') }}" class="btn btn-primary">Se connecter</a>
+        {% endif %}
+
+    </article>
+{% endblock %}
